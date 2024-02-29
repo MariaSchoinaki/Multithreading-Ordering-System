@@ -52,12 +52,12 @@ void *order(void *args) {
     unsigned int id = *(args2 -> idp); //the variable id saves the first argument converting the pointer into an actual value (dereference)
     unsigned int seed = *(args2 -> seedp); //the variable seed saves the second argument converting the pointer into an actual value (dereference)
     unsigned int time_passed = *(args2 -> time); //the variable time_passed saves the third argument converting the pointer into an actual value (dereference)
-    struct timespec emfanish_pelath_paketarisma, paketarisma; //initialiting timespec variables in order to calculate time for each time space
-    struct timespec emfanish_pelath_delivery, delivery;
-    struct timespec oloklhrwsh_psisimatos, delivery_krywma;
-    unsigned int etoimasia;
-    unsigned int paradosh;
-    unsigned int kruwma;
+    struct timespec customer_entity_packing, packing; //initialiting timespec variables in order to calculate time for each time space
+    struct timespec customer_entity_delivery, delivery;
+    struct timespec finish_baking, delivery_cooling;
+    unsigned int preparation;
+    unsigned int Delivery ;
+    unsigned int Cooling;
     unsigned int sample_seed = seed + id; //initialiting a different seed for each order by adding the id
     unsigned int pizzas_propability;
     unsigned int payment_time;
@@ -67,10 +67,10 @@ void *order(void *args) {
     unsigned int plain = 0;
     unsigned int special = 0;
 
-    rc = clock_gettime(CLOCK_REALTIME, &emfanish_pelath_paketarisma); //marks the begining of a specific time space
+    rc = clock_gettime(CLOCK_REALTIME, &customer_entity_packing); //marks the begining of a specific time space
     check_rc(rc, 10);
     
-    rc = clock_gettime(CLOCK_REALTIME, &emfanish_pelath_delivery);
+    rc = clock_gettime(CLOCK_REALTIME, &customer_entity_delivery);
     check_rc(rc, 10);
 
     unsigned int how_many_pizzas = 1 + rand_r(&sample_seed) % sample; //generating a random number of pizzas, between 1 and 5
@@ -159,7 +159,7 @@ void *order(void *args) {
     
     sleep(Tbake);
 
-    rc = clock_gettime(CLOCK_REALTIME, &oloklhrwsh_psisimatos);
+    rc = clock_gettime(CLOCK_REALTIME, &finish_baking);
     check_rc(rc, 10);
 //-------------------------------------------------------Packers-----------------------------------------------------------------------------------------------------------
     rc = pthread_mutex_lock(&package_mutex);
@@ -203,12 +203,12 @@ void *order(void *args) {
     rc = pthread_mutex_unlock(&ovens_mutex);
     check_rc(rc, 10);
 
-    rc = clock_gettime(CLOCK_REALTIME, &paketarisma);
+    rc = clock_gettime(CLOCK_REALTIME, &packing);
     check_rc(rc, 10);
 
-    etoimasia = (paketarisma.tv_sec - emfanish_pelath_paketarisma.tv_sec); //calculate the time passed between the appearance of the costumer and the time slice, when his order was packed
+    preparation = (packing.tv_sec - customer_entity_packing.tv_sec); //calculate the time passed between the appearance of the costumer and the time slice, when his order was packed
     
-    access_screen("\nThe order with id %u was prepared within %u minutes ", id, etoimasia, 0 ,2);
+    access_screen("\nThe order with id %u was prepared within %u minutes ", id, preparation, 0 ,2);
 //------------------------------------------------------Deliverers---------------------------------------------------------------------------------------------------------
     sample = Tdellhigh - Tdellow + 1;
     delivery_time = Tdellow + (rand_r(&sample_seed) % sample); //generating a random number between Tdellow and Tdellhigh, which represents the required delivery time
@@ -232,25 +232,25 @@ void *order(void *args) {
 
     rc = clock_gettime(CLOCK_REALTIME, &delivery);
     check_rc(rc, 10);
-    paradosh = (delivery.tv_sec - emfanish_pelath_delivery.tv_sec); //calculate the time passed from the time, when the costumer appeared, to the time he recieved the pizzas he ordered
+    Delivery  = (delivery.tv_sec - customer_entity_delivery.tv_sec); //calculate the time passed from the time, when the costumer appeared, to the time he recieved the pizzas he ordered
 
-    access_screen("\nThe order with id %u has been delivered within %u minutes", id, paradosh, 0, 2);
+    access_screen("\nThe order with id %u has been delivered within %u minutes", id, Delivery , 0, 2);
 
-    rc = clock_gettime(CLOCK_REALTIME, &delivery_krywma);
+    rc = clock_gettime(CLOCK_REALTIME, &delivery_cooling);
     check_rc(rc, 10);
-    kruwma = (delivery_krywma.tv_sec - oloklhrwsh_psisimatos.tv_sec); //calculate the time passed from the time the pizzas finished baking, to the time costumer takes the pizzas he ordered
+    Cooling = (delivery_cooling.tv_sec - finish_baking.tv_sec); //calculate the time passed from the time the pizzas finished baking, to the time costumer takes the pizzas he ordered
 
     rc = pthread_mutex_lock(&statics_mutex);
     check_rc(rc, 10);
     
-    sunolikh_paradosh += paradosh; //total time passed from costumer appearance to the time he took the pizzas he ordered
-    if(max_paradosh < paradosh) {
-        max_paradosh = paradosh;
+    Sum_Delivery  += Delivery ; //total time passed from costumer appearance to the time he took the pizzas he ordered
+    if(max_Delivery  < Delivery ) {
+        max_Delivery  = Delivery ;
     }
     
-    sunoliko_kruwma += kruwma; //total time passed from time pizzas exited the oven to the time he took the pizzas he ordered
-    if(max_kruwma < kruwma) {
-        max_kruwma = kruwma;
+    sum_Cooling += Cooling; //total time passed from time pizzas exited the oven to the time he took the pizzas he ordered
+    if(max_Cooling < Cooling) {
+        max_Cooling = Cooling;
     }
     
     rc = pthread_mutex_unlock(&statics_mutex);
@@ -335,8 +335,8 @@ int main (int argc, char *argv[]) {
     access_screen("\n\nTotal income from the sales is %u € (euros).", income, 0, 0, 1);
     access_screen("\nThere were sold %u plain pizzas and %u special pizzas", total_plain, total_special, 0, 2);
     access_screen("\nThe number of successful orders was %u and, the faild ones was %u", how_many_passed, how_many_failed, 0, 2);
-    access_screen("\nThe average waiting time was %d minutes, and the maximum was %u minutes", (sunolikh_paradosh/how_many_passed), max_paradosh, 0, 2);
-    access_screen("\nThe average colding time was %d minutes, and the maximum was %u minutes\n", (sunoliko_kruwma/how_many_passed), max_kruwma, 0, 2);
+    access_screen("\nThe average waiting time was %d minutes, and the maximum was %u minutes", (Sum_Delivery /how_many_passed), max_Delivery , 0, 2);
+    access_screen("\nThe average colding time was %d minutes, and the maximum was %u minutes\n", (sum_Cooling/how_many_passed), max_Cooling, 0, 2);
 //--------------------------------------------------------Destroys---------------------------------------------------------------------------------------------------------
     destroyer(10);
     return 0;
