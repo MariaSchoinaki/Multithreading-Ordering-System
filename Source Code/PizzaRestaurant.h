@@ -47,10 +47,10 @@ unsigned int total_special = 0;
 unsigned int total_plain = 0;
 unsigned int how_many_failed = 0;
 unsigned int how_many_passed = 0;
-unsigned int sunolikh_paradosh = 0;
-unsigned int max_paradosh = 0;
-unsigned int sunoliko_kruwma = 0;
-unsigned int max_kruwma = 0;
+unsigned int Sum_Delivery = 0;
+unsigned int max_Delivery  = 0;
+unsigned int sum_Cooling = 0;
+unsigned int max_Cooling = 0;
 //---------------------------------------------------Struct-for-order------------------------------------------------------------------------------------------------------
 struct arguments {
     unsigned int * idp;
