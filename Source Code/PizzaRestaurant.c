@@ -56,8 +56,8 @@ void *order(void *args) {
     struct timespec customer_entity_delivery, delivery;
     struct timespec finish_baking, delivery_cooling;
     unsigned int preparation;
-    unsigned int Delivery ;
-    unsigned int Cooling;
+    unsigned int delivery ;
+    unsigned int cooling;
     unsigned int sample_seed = seed + id; //initialiting a different seed for each order by adding the id
     unsigned int pizzas_propability;
     unsigned int payment_time;
@@ -232,25 +232,25 @@ void *order(void *args) {
 
     rc = clock_gettime(CLOCK_REALTIME, &delivery);
     check_rc(rc, 10);
-    Delivery  = (delivery.tv_sec - customer_entity_delivery.tv_sec); //calculate the time passed from the time, when the costumer appeared, to the time he recieved the pizzas he ordered
+    delivery  = (delivery.tv_sec - customer_entity_delivery.tv_sec); //calculate the time passed from the time, when the costumer appeared, to the time he recieved the pizzas he ordered
 
-    access_screen("\nThe order with id %u has been delivered within %u minutes", id, Delivery , 0, 2);
+    access_screen("\nThe order with id %u has been delivered within %u minutes", id, delivery , 0, 2);
 
     rc = clock_gettime(CLOCK_REALTIME, &delivery_cooling);
     check_rc(rc, 10);
-    Cooling = (delivery_cooling.tv_sec - finish_baking.tv_sec); //calculate the time passed from the time the pizzas finished baking, to the time costumer takes the pizzas he ordered
+    cooling = (delivery_cooling.tv_sec - finish_baking.tv_sec); //calculate the time passed from the time the pizzas finished baking, to the time costumer takes the pizzas he ordered
 
     rc = pthread_mutex_lock(&statics_mutex);
     check_rc(rc, 10);
     
-    Sum_Delivery  += Delivery ; //total time passed from costumer appearance to the time he took the pizzas he ordered
-    if(max_Delivery  < Delivery ) {
-        max_Delivery  = Delivery ;
+    sum_delivery  += delivery ; //total time passed from costumer appearance to the time he took the pizzas he ordered
+    if(max_delivery  < delivery ) {
+        max_delivery  = delivery ;
     }
     
-    sum_Cooling += Cooling; //total time passed from time pizzas exited the oven to the time he took the pizzas he ordered
-    if(max_Cooling < Cooling) {
-        max_Cooling = Cooling;
+    sum_cooling += cooling; //total time passed from time pizzas exited the oven to the time he took the pizzas he ordered
+    if(max_cooling < cooling) {
+        max_cooling = cooling;
     }
     
     rc = pthread_mutex_unlock(&statics_mutex);
@@ -335,8 +335,8 @@ int main (int argc, char *argv[]) {
     access_screen("\n\nTotal income from the sales is %u € (euros).", income, 0, 0, 1);
     access_screen("\nThere were sold %u plain pizzas and %u special pizzas", total_plain, total_special, 0, 2);
     access_screen("\nThe number of successful orders was %u and, the faild ones was %u", how_many_passed, how_many_failed, 0, 2);
-    access_screen("\nThe average waiting time was %d minutes, and the maximum was %u minutes", (Sum_Delivery /how_many_passed), max_Delivery , 0, 2);
-    access_screen("\nThe average colding time was %d minutes, and the maximum was %u minutes\n", (sum_Cooling/how_many_passed), max_Cooling, 0, 2);
+    access_screen("\nThe average waiting time was %d minutes, and the maximum was %u minutes", (sum_delivery /how_many_passed), max_delivery , 0, 2);
+    access_screen("\nThe average colding time was %d minutes, and the maximum was %u minutes\n", (sum_cooling/how_many_passed), max_cooling, 0, 2);
 //--------------------------------------------------------Destroys---------------------------------------------------------------------------------------------------------
     destroyer(10);
     return 0;
