@@ -1,7 +1,6 @@
 # Multithreaded Implementation of a Real Time Pizza Restaurant Ordering System
 
-The Real Time Pizza Restaurant Ordering System is a multithreading executable c program that simulates a real time  w pizza restaurant ordering system.
-The ordering system is consisted of packers, deliverers and orders. Each of these entities is a thread that sleeps and wakes in the right desired time, which represents the waiting time of a customer in a real world case scenario. In order to lock and unlock an entity (i.e. pizza ovens)  we implemented mutexes to control the access of threads in specific variables correctly.
+The Real Time Pizza Restaurant Ordering System is a multithreaded executable C program that simulates a real time pizza restaurant ordering system.
 
 ## How to Run
 1. Clone the project.
