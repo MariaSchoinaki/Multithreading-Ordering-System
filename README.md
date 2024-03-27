@@ -15,7 +15,7 @@ This project in consisted of mutexes and threads accomplishing the aim of the or
 1. Clone the project.
 2. Make sure you have installed a proper c/c++ compiler (Recommended operating system to run this program macOS / Linux).
 3. Open your terminal.
-4. Change the working directory to the cloned projecte's one.
+4. Change the working directory to the cloned project's one.
 5. Run.
    ```sh
    >>gcc PizzaRestaurant.c -o executable 
@@ -24,6 +24,6 @@ This project in consisted of mutexes and threads accomplishing the aim of the or
 6. The simulation has started!
 
 ## Collaborators
-- [Pavlos Fasois](https://github.com/PavlosFas13)
 - [Maria Schoinaki](https://github.com/MariaSchoinaki)
+- [Pavlos Fasois](https://github.com/PavlosFas13)
 - [Christos Stamoulos](https://github.com/ChristosStamoulos)
